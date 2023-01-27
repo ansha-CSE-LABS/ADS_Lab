@@ -18,26 +18,6 @@ private:
     NodePtr root;
     NodePtr TNULL;
 
-    void initializeNULLNode(NodePtr node, NodePtr parent)
-    {
-        node->data = 0;
-        node->parent = parent;
-        node->left = nullptr;
-        node->right = nullptr;
-        node->color = 0;
-    }
-
-    void rbTransplant(NodePtr u, NodePtr v)
-    {
-        if (u->parent == nullptr)
-            root = v;
-        else if (u == u->parent->left)
-            u->parent->left = v;
-        else
-            u->parent->right = v;
-        v->parent = u->parent;
-    }
-
     // For balancing the tree after insertion
     void insertFix(NodePtr k)
     {
@@ -128,52 +108,6 @@ public:
         root = TNULL;
     }
 
-    NodePtr minimum(NodePtr node)
-    {
-        while (node->left != TNULL)
-            node = node->left;
-
-        return node;
-    }
-
-    NodePtr maximum(NodePtr node)
-    {
-        while (node->right != TNULL)
-            node = node->right;
-
-        return node;
-    }
-
-    NodePtr successor(NodePtr x)
-    {
-        if (x->right != TNULL)
-            return minimum(x->right);
-
-        NodePtr y = x->parent;
-        while (y != TNULL && x == y->right)
-        {
-            x = y;
-            y = y->parent;
-        }
-        return y;
-    }
-
-    NodePtr predecessor(NodePtr x)
-    {
-        if (x->left != TNULL)
-        {
-            return maximum(x->left);
-        }
-
-        NodePtr y = x->parent;
-        while (y != TNULL && x == y->left)
-        {
-            x = y;
-            y = y->parent;
-        }
-        return y;
-    }
-
     void leftRotate(NodePtr x)
     {
         NodePtr y = x->right;
@@ -215,7 +149,7 @@ public:
         y->right = x;
         x->parent = y;
     }
-
+    
     // Inserting a node
     void insert(int key)
     {
@@ -258,11 +192,6 @@ public:
 
         insertFix(node);
     }
-
-    NodePtr getRoot(){
-        return this->root;
-    }
-
     void printTree(){
         if (root)
             printHelper(this->root, "", true);
